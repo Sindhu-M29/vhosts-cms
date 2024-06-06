@@ -1,0 +1,40 @@
+<VirtualHost *:99>
+    ServerName magento.sindhu.local
+    ServerAlias www.magento.sindhu.local
+
+    DocumentRoot /var/www/html/magento/pub
+    DirectoryIndex index.php
+    RewriteEngine On
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R=301,L]
+
+    <Directory /var/www/html/magento/>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog /var/log/apache2/magento_error.log
+    CustomLog /var/log/apache2/magento_access.log combined
+</VirtualHost>
+<VirtualHost *:443>
+    ServerName magento.sindhu.local
+    ServerAlias www.magento.sindhu.local
+
+    DocumentRoot /var/www/html/magento/pub
+    DirectoryIndex index.php
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/server.crt
+    SSLCertificateKeyFile /etc/ssl/private/server.key
+
+    <Directory /var/www/html/magento/>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/magento_error.log
+    CustomLog ${APACHE_LOG_DIR}/magento_access.log combined
+</VirtualHost>
+
+REFER: https://www.rosehosting.com/blog/how-to-install-magento-2-4-4-on-ubuntu-22-04/
