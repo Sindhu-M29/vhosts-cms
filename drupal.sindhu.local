@@ -1,0 +1,42 @@
+<VirtualHost *:80>
+    ServerName drupal.sindhu.local
+    ServerAlias www.drupal.sindhu.local
+
+    DocumentRoot /var/www/html/drupal
+    DirectoryIndex index.php
+
+    RewriteEngine On
+    RewriteCond %{HTTPS} !=on
+    RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R=301,L]
+
+    <Directory /var/www/html/drupal>
+        Options FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog /var/log/apache2/drupal_error.log
+    CustomLog /var/log/apache2/drupal_access.log combined
+</VirtualHost>
+<VirtualHost *:443>
+    ServerName drupal.sindhu.local
+    ServerAlias www.drupal.sindhu.local
+
+    DocumentRoot /var/www/html/drupal
+    DirectoryIndex index.php
+
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/server.crt
+    SSLCertificateKeyFile /etc/ssl/private/server.key
+
+    <Directory /var/www/html/drupal>
+        Options FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/drupal_error.log
+    CustomLog ${APACHE_LOG_DIR}/drupal_access.log combined
+</VirtualHost>
+
+REFER: https://blog.alphavps.com/how-to-install-drupal-on-ubuntu-22-04/
